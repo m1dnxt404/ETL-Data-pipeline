@@ -12,3 +12,4 @@ venv/
 *.log
 postgres_data/
 pgadmin_data/
+Enhancements.md
