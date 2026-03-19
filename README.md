@@ -11,7 +11,7 @@ A production-style ETL pipeline that extracts real-time and historical stock mar
 │                     Docker Network                     │
 │                                                        │
 │  ┌──────────┐    ┌──────────┐    ┌──────────────────┐  │
-│  │ Finnhub  │───▶│   ETL    │───▶│   PostgreSQL    │  │
+│  │ Finnhub  │──▶ │   ETL    │──▶│   PostgreSQL     │  │
 │  │   API    │    │ Service  │    │                  │  │
 │  └──────────┘    └──────────┘    │  stock_quotes    │  │
 │                                  │  stock_candles   │  │
@@ -225,13 +225,13 @@ docker compose exec postgres psql -U etl_user -d stocks_etl
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
-| Language | Python 3.12 |
-| HTTP client | requests + tenacity (retry) + ratelimit |
-| Data transformation | pandas |
-| ORM / DB | SQLAlchemy 2.0 + psycopg2 |
-| Database | PostgreSQL 16 |
-| Scheduler | APScheduler 3.x |
-| Dashboard | Streamlit + Plotly |
-| Containerization | Docker + Docker Compose |
+| Layer               | Technology                              |
+|---------------------|-----------------------------------------|
+| Language            | Python 3.12                             |
+| HTTP client         | requests + tenacity (retry) + ratelimit |
+| Data transformation | pandas                                  |
+| ORM / DB            | SQLAlchemy 2.0 + psycopg2               |
+| Database            | PostgreSQL 16                           |
+| Scheduler           | APScheduler 3.x                         |
+| Dashboard           | Streamlit + Plotly                      |
+| Containerization    | Docker + Docker Compose                 |
