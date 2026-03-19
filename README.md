@@ -81,10 +81,10 @@ ETL Data pipeline/
 
 ## Prerequisites
 
-| Requirement | Version |
-|---|---|
-| Docker Desktop | 24+ |
-| Docker Compose | v2+ |
+| Requirement     | Version                                  |
+|-----------------|------------------------------------------|
+| Docker Desktop  | 24+                                      |
+| Docker Compose  | v2+                                      |
 | Finnhub API key | free at [finnhub.io](https://finnhub.io) |
 
 ---
