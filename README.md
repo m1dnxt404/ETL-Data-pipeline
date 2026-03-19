@@ -184,17 +184,17 @@ Three tables:
 
 All settings are read from environment variables (`.env` file):
 
-| Variable | Default | Description |
-|---|---|---|
-| `FINNHUB_API_KEY` | — | **Required.** Your Finnhub API key |
-| `STOCK_TICKERS` | 14 large-cap US stocks | Comma-separated list of ticker symbols |
-| `ETL_INTERVAL_SECONDS` | `300` | How often to fetch quotes (seconds) |
-| `HISTORY_DAYS` | `30` | Days of candle history to load on startup |
-| `POSTGRES_DB` | `stocks_etl` | Database name |
-| `POSTGRES_USER` | `etl_user` | Database user |
-| `POSTGRES_PASSWORD` | `etl_secret_password` | Database password |
-| `PGADMIN_DEFAULT_EMAIL` | `admin@admin.com` | pgAdmin login email |
-| `PGADMIN_DEFAULT_PASSWORD` | `admin` | pgAdmin login password |
+| Variable                   | Default                | Description                               |
+|----------------------------|------------------------|-------------------------------------------|
+| `FINNHUB_API_KEY`          | —                      | **Required.** Your Finnhub API key        |
+| `STOCK_TICKERS`            | 14 large-cap US stocks | Comma-separated list of ticker symbols    |
+| `ETL_INTERVAL_SECONDS`     | `300`                  | How often to fetch quotes (seconds)       |
+| `HISTORY_DAYS`             | `30`                   | Days of candle history to load on startup |
+| `POSTGRES_DB`              | `stocks_etl`           | Database name                             |
+| `POSTGRES_USER`            | `etl_user`             | Database user                             |
+| `POSTGRES_PASSWORD`        | `etl_secret_password`  | Database password                         |
+| `PGADMIN_DEFAULT_EMAIL`    | `admin@admin.com`      | pgAdmin login email                       |
+| `PGADMIN_DEFAULT_PASSWORD` | `admin`                | pgAdmin login password                    |
 
 ---
 
