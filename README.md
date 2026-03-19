@@ -172,11 +172,11 @@ Streamlit app with auto-refresh every 60 seconds:
 
 Three tables:
 
-| Table | Description | Upsert Key |
-|---|---|---|
-| `stock_quotes` | Real-time snapshot per ETL run | `(ticker, fetched_at)` |
-| `stock_candles` | Daily OHLCV history | `(ticker, date)` |
-| `company_profiles` | Static company info | `ticker` |
+| Table              | Description                    | Upsert Key             |
+|--------------------|--------------------------------|------------------------|
+| `stock_quotes`     | Real-time snapshot per ETL run | `(ticker, fetched_at)` |
+| `stock_candles`    | Daily OHLCV history            | `(ticker, date)`       |
+| `company_profiles` | Static company info            | `ticker`               |
 
 ---
 
