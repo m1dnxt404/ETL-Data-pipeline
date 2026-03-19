@@ -121,11 +121,11 @@ docker compose up --build
 
 First startup takes ~2 minutes to build images. Once running:
 
-| Service | URL |
-|---|---|
+| Service             | URL                   |
+|---------------------|-----------------------|
 | Streamlit Dashboard | http://localhost:8501 |
-| pgAdmin | http://localhost:5050 |
-| PostgreSQL | localhost:5432 |
+| pgAdmin             | http://localhost:5050 |
+| PostgreSQL          | localhost:5432        |
 
 pgAdmin login: `admin@admin.com` / `admin`
 
@@ -149,10 +149,10 @@ docker compose down -v
 
 Runs on startup and then on a schedule:
 
-| Job | Trigger | What it does |
-|---|---|---|
-| Quote job | Every 5 minutes | Fetches real-time quotes for all tickers → `stock_quotes` |
-| Candle job | Every 24 hours | Fetches last 2 days of OHLCV → `stock_candles` |
+| Job          | Trigger         | What it does                                              |
+|--------------|-----------------|-----------------------------------------------------------|
+| Quote job    | Every 5 minutes | Fetches real-time quotes for all tickers → `stock_quotes` |
+| Candle job   | Every 24 hours  | Fetches last 2 days of OHLCV → `stock_candles`            |
 | Initial load | On startup only | Fetches full history (default 30 days) + company profiles |
 
 **Rate limiting** is enforced at the HTTP layer via `@sleep_and_retry` + `@limits(calls=60, period=60)` from the `ratelimit` library. A tenacity `@retry` decorator handles transient network errors with exponential backoff (2s → 4s → 8s → 16s → 32s, max 5 attempts).
