@@ -1,0 +1,8 @@
+requests==2.31.0
+pandas==2.2.2
+sqlalchemy==2.0.30
+psycopg2-binary==2.9.9
+tenacity==8.2.3
+apscheduler==3.10.4
+ratelimit==2.2.1
+python-dotenv==1.0.1

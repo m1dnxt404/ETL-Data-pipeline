@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Stocks ETL Postgres",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "stocks_etl",
+      "Username": "etl_user",
+      "SSLMode": "prefer"
+    }
+  }
+}
