@@ -234,18 +234,18 @@ Streamlit app with auto-refresh every 60 seconds:
 
 Two databases in one container:
 
-| Database | Purpose |
-|---|---|
-| `stocks_etl` | Application data (created by `db/init.sql`) |
-| `airflow` | Airflow metadata — DAG runs, task instances, XCom (created by `airflow-init`) |
+| Database     | Purpose                                                                       |
+|--------------|-------------------------------------------------------------------------------|
+| `stocks_etl` | Application data (created by `db/init.sql`)                                   |
+| `airflow`    | Airflow metadata — DAG runs, task instances, XCom (created by `airflow-init`) |
 
 Three application tables:
 
-| Table | Description | Upsert Key |
-|---|---|---|
-| `stock_quotes` | Real-time snapshot per DAG run | `(ticker, fetched_at)` |
-| `stock_candles` | Daily OHLCV history | `(ticker, date)` |
-| `company_profiles` | Static company info | `ticker` |
+| Table              | Description                    | Upsert Key             |
+|--------------------|--------------------------------|------------------------|
+| `stock_quotes`     | Real-time snapshot per DAG run | `(ticker, fetched_at)` |
+| `stock_candles`    | Daily OHLCV history            | `(ticker, date)`       |
+| `company_profiles` | Static company info            | `ticker`               |
 
 ---
 
