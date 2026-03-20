@@ -1,5 +1,33 @@
 version: "3.9"
 
+# ── Shared Airflow config (anchor) ─────────────────────────────────────────────
+x-airflow-common: &airflow-common
+  build:
+    context: ./airflow
+    dockerfile: Dockerfile
+  env_file: .env
+  environment:
+    AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIRFLOW_DB_USER}:${AIRFLOW_DB_PASSWORD}@postgres/${AIRFLOW_DB_NAME}
+    AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://${AIRFLOW_DB_USER}:${AIRFLOW_DB_PASSWORD}@postgres/${AIRFLOW_DB_NAME}
+    AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW_FERNET_KEY}
+    AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_SECRET_KEY}
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    POSTGRES_HOST: postgres
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./etl:/opt/airflow/dags/etl
+    - airflow_logs:/opt/airflow/logs
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  networks:
+    - stocks_net
+
 services:
 
   # ── PostgreSQL ──────────────────────────────────────────────────────────────
@@ -25,21 +53,86 @@ services:
     networks:
       - stocks_net
 
-  # ── ETL Service ─────────────────────────────────────────────────────────────
-  etl:
-    build:
-      context: ./etl
-      dockerfile: Dockerfile
-    container_name: stocks_etl
+  # ── Redis (Celery broker) ───────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: stocks_redis
     restart: unless-stopped
-    env_file: .env
-    environment:
-      POSTGRES_HOST: postgres
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - stocks_net
+
+  # ── Airflow Init (one-shot) ─────────────────────────────────────────────────
+  airflow-init:
+    <<: *airflow-common
+    container_name: stocks_airflow_init
+    command: >
+      bash -c "
+        python /opt/airflow/scripts/init_db.py &&
+        airflow db migrate &&
+        airflow users create
+          --username admin
+          --firstname Admin
+          --lastname User
+          --role Admin
+          --email admin@example.com
+          --password ${AIRFLOW_ADMIN_PASSWORD:-admin}
+      "
+    restart: "no"
+
+  # ── Airflow Webserver ───────────────────────────────────────────────────────
+  airflow-webserver:
+    <<: *airflow-common
+    container_name: stocks_airflow_webserver
+    command: webserver
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
-    networks:
-      - stocks_net
+      redis:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # ── Airflow Scheduler ───────────────────────────────────────────────────────
+  airflow-scheduler:
+    <<: *airflow-common
+    container_name: stocks_airflow_scheduler
+    command: scheduler
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully
+
+  # ── Airflow Worker (Celery) ─────────────────────────────────────────────────
+  airflow-worker:
+    <<: *airflow-common
+    container_name: stocks_airflow_worker
+    command: celery worker
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully
 
   # ── Streamlit Dashboard ─────────────────────────────────────────────────────
   dashboard:
@@ -80,6 +173,7 @@ services:
 volumes:
   postgres_data:
   pgadmin_data:
+  airflow_logs:
 
 networks:
   stocks_net:
