@@ -300,14 +300,14 @@ docker compose exec postgres psql -U airflow -d airflow
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
-| Language | Python 3.12 |
-| HTTP client | requests + tenacity (retry) + ratelimit |
-| Data transformation | pandas |
-| ORM / DB | SQLAlchemy 2.0 + psycopg2 |
-| Database | PostgreSQL 16 |
-| Orchestration | Apache Airflow 2.9 (CeleryExecutor) |
-| Message broker | Redis 7 |
-| Dashboard | Streamlit + Plotly |
-| Containerization | Docker + Docker Compose |
+| Layer               | Technology                              |
+|---------------------|-----------------------------------------|
+| Language            | Python 3.12                             |
+| HTTP client         | requests + tenacity (retry) + ratelimit |
+| Data transformation | pandas                                  |
+| ORM / DB            | SQLAlchemy 2.0 + psycopg2               |
+| Database            | PostgreSQL 16                           |
+| Orchestration       | Apache Airflow 2.9 (CeleryExecutor)     |
+| Message broker      | Redis 7                                 |
+| Dashboard           | Streamlit + Plotly                      |
+| Containerization    | Docker + Docker Compose                 |
